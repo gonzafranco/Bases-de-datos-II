@@ -305,6 +305,7 @@ SELECT CASE
 	WHEN  @alumnos_masculinos < @alumnos_femeninos THEN 'Hay mas estudiantes femeninos en el sistema de la libreria'
 	ELSE 'Hay la misma cantidad de alumnos femeninos y masculinos en el sistema de la libreria'
 	END
+	AS resultado
 
 END;
 
