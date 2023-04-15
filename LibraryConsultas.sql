@@ -280,6 +280,34 @@ ORDER BY CantPaginas OFFSET 0 ROWS
 
 SELECT * FROM vw_libros_grandes
 
+
+/*
+21) Escribir un script simple que cree dos variables de tipo enteras (una llamada cantM y otra
+llamada cantF), y les asigne los valores de la cantidad de Estudiantes Masculinos y
+femeninos respectivamente.
+
+Luego informar por pantalla que genero tiene mas alumnos.
+
+*/
+
+BEGIN
+
+DECLARE @alumnos_masculinos int;
+DECLARE @alumnos_femeninos int;
+
+SET @alumnos_masculinos = (SELECT count(*) FROM dbo.Estudiantes WHERE Genero = 'M');
+SET @alumnos_femeninos = (SELECT count(*) FROM dbo.Estudiantes WHERE Genero = 'F');
+
+--SELECT @alumnos_masculinos M, @alumnos_femeninos F, (@alumnos_masculinos + @alumnos_femeninos) Total
+
+SELECT CASE 
+	WHEN  @alumnos_masculinos > @alumnos_femeninos THEN 'Hay mas estudiantes masculinos en el sistema de la libreria'
+	WHEN  @alumnos_masculinos < @alumnos_femeninos THEN 'Hay mas estudiantes femeninos en el sistema de la libreria'
+	ELSE 'Hay la misma cantidad de alumnos femeninos y masculinos en el sistema de la libreria'
+	END
+
+END;
+
 -- 22) Informar de cada libro cual fue el primer estudiante que lo pidio y la fecha.
 
 SELECT l.NombreLibro, 
@@ -290,5 +318,18 @@ JOIN [dbo].[Prestamos] AS p ON (l.bookId = p.bookId)
 JOIN [dbo].[Estudiantes] AS e ON (p.studentId = e.studentId)
 WHERE p.DiaPrestamo = (SELECT MIN(p2.DiaPrestamo) 
 						FROM [dbo].[Prestamos] AS p2 
-						WHERE p2.bookId = p.bookId)
+						WHERE p2.bookId = p.bookId
+						GROUP BY bookId)
 ORDER BY l.NombreLibro;
+
+/*
+SELECT  p.bookId, 
+		l.NombreLibro,
+		(e.Nombre +' '+ e.Apellido) as nombreAlumno,
+		p.DiaPrestamo
+FROM dbo.Prestamos p
+JOIN dbo.Libros l ON (p.bookId = l.bookId)
+JOIN dbo.Estudiantes e ON (e.studentId =p.studentId)
+WHERE p.bookId = 1
+ORDER BY p.DiaPrestamo asc
+*/
