@@ -320,7 +320,7 @@ WHERE p.DiaPrestamo = (SELECT MIN(p2.DiaPrestamo)
 						FROM [dbo].[Prestamos] AS p2 
 						WHERE p2.bookId = p.bookId
 						GROUP BY bookId)
-ORDER BY l.NombreLibro;
+ORDER BY l.bookId;
 
 /*
 SELECT  p.bookId, 
